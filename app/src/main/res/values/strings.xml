@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">UkraineAirAlarm</string>
+    <string name="app_name">Ukraine Air Alarm</string>
+
+    <string name="menu_volume">Sound</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="status_ok">All okay</string>
+    <string name="status_alarmed">Attention! Go to the closest shelter!</string>
+
+    <string name="btn_unsubscribe">Select other region</string>
+
+    <string name="regions_btn_select">Select</string>
 </resources>

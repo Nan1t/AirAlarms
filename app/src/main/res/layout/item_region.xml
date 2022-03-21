@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_margin="2dp"
+    android:background="@color/light_2">
+
+    <TextView
+        android:id="@+id/region_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="90"
+        android:gravity="center"
+        android:paddingVertical="10dp"
+        tools:text="[Region name]"/>
+
+    <ImageButton
+        android:id="@+id/region_btn_select"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="10"
+        android:src="@drawable/ic_baseline_arrow_right"
+        android:background="@color/accent"
+        android:contentDescription="@string/regions_btn_select" />
+
+</LinearLayout>
