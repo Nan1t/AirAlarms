@@ -8,26 +8,21 @@
     android:background="@color/success">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        style="@style/PrimaryButton.FaMiniButton"
+        android:id="@+id/main_btn_volume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/menu_volume"
-        app:backgroundTint="@color/light"
-        app:tint="@color/black"
-        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_baseline_volume_up"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_volume_up" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/PrimaryButton.FaMiniButton"
+        android:id="@+id/main_btn_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/menu_settings"
-        app:fabSize="mini"
-        app:backgroundTint="@color/light"
-        app:tint="@color/black"
         app:srcCompat="@drawable/ic_baseline_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +36,7 @@
         app:layout_constraintBottom_toTopOf="@+id/main_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/floatingActionButton" />
+        app:layout_constraintTop_toBottomOf="@+id/main_btn_volume" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/main_guideline"
@@ -76,14 +71,12 @@
         tools:text="[REGION NAME]" />
 
     <Button
+        style="@style/PrimaryButton"
         android:id="@+id/btn_unsubscribe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_unsubscribe"
         android:paddingVertical="15dp"
-        android:backgroundTint="@color/light"
-        android:textColor="@color/black"
-        app:rippleColor="@color/light_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

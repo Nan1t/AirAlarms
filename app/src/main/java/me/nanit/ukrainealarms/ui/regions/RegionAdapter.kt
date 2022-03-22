@@ -3,7 +3,7 @@ package me.nanit.ukrainealarms.ui.regions
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import me.nanit.ukrainealarms.R
@@ -16,7 +16,7 @@ class RegionAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_region, parent)
+            .inflate(R.layout.item_region, parent, false)
 
         return RegionHolder(view)
     }
@@ -28,15 +28,14 @@ class RegionAdapter(
 
     override fun getItemCount(): Int = regions.size
 
-    inner class RegionHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class RegionHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         private val nameField: TextView = view.findViewById(R.id.region_name)
-        private val selectBtn: Button = view.findViewById(R.id.region_btn_select)
 
         fun bind(region: Region) {
             nameField.text = region.name
 
-            selectBtn.setOnClickListener {
+            view.setOnClickListener {
                 clickListener.onClick(region)
             }
         }

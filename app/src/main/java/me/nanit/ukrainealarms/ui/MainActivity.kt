@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var alarmImage: ImageView
     private lateinit var alarmText: TextView
     private lateinit var regionName: TextView
+    private lateinit var btnUnsubscribe: Button
     private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,13 +26,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         preferences = getSharedPreferences("settings", MODE_PRIVATE)
 
-        val currentRegion = preferences.getInt("region", -1)
+        val currentRegion = preferences.getInt("regionId", -1)
 
         if (currentRegion == -1) {
-            val intent = Intent(this, RegionsActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            startActivity(intent)
-            finish()
+            openRegionsListActivity()
             return
         }
 
@@ -38,10 +37,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         alarmImage = findViewById(R.id.status_icon)
         alarmText = findViewById(R.id.status_text)
         regionName = findViewById(R.id.current_region)
+        btnUnsubscribe = findViewById(R.id.btn_unsubscribe)
 
         regionName.text = preferences.getString("regionName", "Region undefined")
 
+        btnUnsubscribe.setOnClickListener(this::onUnsubscribeClick)
+
         deactivateAlarm()
+    }
+
+    private fun onUnsubscribeClick(view: View) {
+        preferences.edit()
+            .remove("regionId")
+            .remove("regionName")
+            .apply()
+
+        openRegionsListActivity()
     }
 
     private fun activateAlarm() {
@@ -54,6 +65,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         rootView.setBackgroundResource(R.color.success)
         alarmImage.setImageResource(R.drawable.ic_baseline_check)
         alarmText.setText(R.string.status_ok)
+    }
+
+    private fun openRegionsListActivity() {
+        val intent = Intent(this, RegionsActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        finish()
     }
 
 }

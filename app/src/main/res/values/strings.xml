@@ -9,5 +9,7 @@
 
     <string name="btn_unsubscribe">Select other region</string>
 
-    <string name="regions_btn_select">Select</string>
+    <string name="regions_title_state">Select state</string>
+    <string name="regions_title_district">Select district</string>
+    <string name="regions_select_whole">Select whole state</string>
 </resources>

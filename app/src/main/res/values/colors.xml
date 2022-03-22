@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="gray">#171717</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light">#FFF9F7F7</color>
     <color name="light_2">#FFDBE2EF</color>
-    <color name="accent">#FF3F72AF</color>
-    <color name="accent_2">#FF112D4E</color>
     <color name="success">#48B64B</color>
-    <color name="danger">#D73636</color>
+    <color name="danger">#BB0325</color>
 </resources>

@@ -6,4 +6,18 @@ data class Region(
     val stateId: Int,
     var districtId: Int? = null,
     val regionType: RegionType,
-)
+) {
+
+    fun isState(): Boolean {
+        return regionType == RegionType.STATE
+    }
+
+    fun isDistrict(): Boolean {
+        return regionType == RegionType.DISTRICT
+    }
+
+    fun isDistrictOf(region: Region): Boolean {
+        return isDistrict() && this.stateId == region.stateId
+    }
+
+}
