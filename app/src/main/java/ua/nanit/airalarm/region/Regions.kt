@@ -2,7 +2,7 @@ package ua.nanit.airalarm.region
 
 import java.util.*
 
-class Regions(private val regions: List<Region>) {
+data class Regions(val regions: List<Region>) {
 
     fun getStates(): List<Region> {
         val states = LinkedList<Region>()
@@ -30,5 +30,10 @@ class Regions(private val regions: List<Region>) {
 
         return districts
     }
+
+    override fun toString(): String {
+        return "Regions(regions=$regions)"
+    }
+
 
 }

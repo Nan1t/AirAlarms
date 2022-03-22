@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Повітряна Тривога</string>
+
+    <string name="menu_volume">Звук</string>
+    <string name="menu_settings">Налаштування</string>
+
+    <string name="status_ok">Все добре</string>
+    <string name="status_alarmed">Тривога! Прямуйте до найближчого укриття!</string>
+
+    <string name="btn_unsubscribe">Вибрати інший регіон</string>
+
+    <string name="regions_title_state">Виберіть область</string>
+    <string name="regions_title_district">Виберіть район</string>
+    <string name="regions_select_whole">Вибрати всю область</string>
+</resources>

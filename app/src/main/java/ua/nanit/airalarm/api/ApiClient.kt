@@ -1,21 +1,18 @@
 package ua.nanit.airalarm.api
 
-import ua.nanit.airalarm.AlarmApp
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
 
-    private val client: Retrofit
-    val services: AlarmServices
+    private const val BASE_API_URL = "https://air-save.ops.ajax.systems/"
 
-    init {
-        client = Retrofit.Builder()
-            .baseUrl(AlarmApp.BASE_API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+    private val client: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_API_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-        services = client.create(AlarmServices::class.java)
-    }
+    val services: AlarmServices =
+        client.create(AlarmServices::class.java)
 
 }

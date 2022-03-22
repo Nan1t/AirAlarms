@@ -20,4 +20,13 @@ data class Region(
         return isDistrict() && this.stateId == region.stateId
     }
 
+    override fun toString(): String {
+        return "Region(id=$id, " +
+                "name='$name', " +
+                "stateId=$stateId, " +
+                "districtId=$districtId, " +
+                "regionType=$regionType)"
+    }
+
+
 }
