@@ -1,4 +1,4 @@
-package me.nanit.ukrainealarms.ui
+package ua.nanit.airalarm.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,12 +10,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import me.nanit.ukrainealarms.R
-import me.nanit.ukrainealarms.api.ApiClient
-import me.nanit.ukrainealarms.region.Region
-import me.nanit.ukrainealarms.region.Regions
-import me.nanit.ukrainealarms.ui.regions.RegionAdapter
-import me.nanit.ukrainealarms.ui.regions.RegionClickListener
+import ua.nanit.airalarm.R
+import ua.nanit.airalarm.api.ApiClient
+import ua.nanit.airalarm.region.Region
+import ua.nanit.airalarm.region.Regions
+import ua.nanit.airalarm.ui.region.RegionAdapter
+import ua.nanit.airalarm.ui.region.RegionClickListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

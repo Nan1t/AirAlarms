@@ -1,4 +1,4 @@
-package me.nanit.ukrainealarms
+package ua.nanit.airalarm
 
 import android.app.Application
 

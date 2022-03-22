@@ -1,8 +1,8 @@
-package me.nanit.ukrainealarms.ui
+package ua.nanit.airalarm.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import me.nanit.ukrainealarms.R
+import ua.nanit.airalarm.R
 
 class SettingsActivity : AppCompatActivity(R.layout.activity_regions) {
 

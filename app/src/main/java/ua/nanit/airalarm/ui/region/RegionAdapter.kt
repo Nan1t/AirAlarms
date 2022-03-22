@@ -1,13 +1,12 @@
-package me.nanit.ukrainealarms.ui.regions
+package ua.nanit.airalarm.ui.region
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import me.nanit.ukrainealarms.R
-import me.nanit.ukrainealarms.region.Region
+import ua.nanit.airalarm.R
+import ua.nanit.airalarm.region.Region
 
 class RegionAdapter(
     private val regions: List<Region>,

@@ -1,4 +1,4 @@
-package me.nanit.ukrainealarms.region
+package ua.nanit.airalarm.region
 
 import java.util.*
 

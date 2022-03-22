@@ -1,6 +1,6 @@
-package me.nanit.ukrainealarms.api
+package ua.nanit.airalarm.api
 
-import me.nanit.ukrainealarms.AlarmApp
+import ua.nanit.airalarm.AlarmApp
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
