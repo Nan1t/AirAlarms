@@ -32,7 +32,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/ic_baseline_check"
-        android:contentDescription="@string/status_ok"
+        android:contentDescription="@string/status_ok_title"
         app:layout_constraintBottom_toTopOf="@+id/main_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,22 +45,35 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.55"/>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/status_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <TextView
+        android:id="@+id/status_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center|top"
-        android:text="@string/status_ok"
+        android:text="@string/status_ok_title"
         android:textColor="@color/white"
-        android:textSize="34sp"
+        android:textSize="36sp"
         android:textStyle="bold"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMaxTextSize="34sp"
-        app:autoSizeMinTextSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/current_region"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_guideline" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/status_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center|top"
+        android:text="@string/status_ok_subtitle"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:autoSizeMaxTextSize="28sp"
+        app:autoSizeMinTextSize="10dp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/current_region"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_title" />
 
     <TextView
         android:id="@+id/current_region"

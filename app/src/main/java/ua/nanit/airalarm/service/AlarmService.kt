@@ -5,12 +5,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.IBinder
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ua.nanit.airalarm.R
 import ua.nanit.airalarm.api.ApiClient
 import ua.nanit.airalarm.region.RegionStatus
 import java.util.concurrent.Executors
@@ -23,18 +21,19 @@ class AlarmService : Service(), Callback<RegionStatus> {
         const val ACTION_ALARM = "ua.nanit.airalarm.ACTION_ALARM"
     }
 
-    private lateinit var alarmManager: AlarmManager
-    private lateinit var prefs: SharedPreferences
-
     private val executor = Executors.newSingleThreadScheduledExecutor()
+
+    private lateinit var prefs: SharedPreferences
+    private lateinit var notificator: Notificator
+
     private var task: ScheduledFuture<*>? = null
     private var regionId = -1
     private var alarmed = false
 
     override fun onCreate() {
         super.onCreate()
-        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        notificator = Notificator(this)
         Log.d("AirAlarm", "Service created")
     }
 
@@ -44,8 +43,10 @@ class AlarmService : Service(), Callback<RegionStatus> {
 
         if (task == null) {
             task = executor.scheduleWithFixedDelay(this::checkAlarms,
-                1, 5, TimeUnit.SECONDS)
+                0, 5, TimeUnit.SECONDS)
         }
+
+        notificator.startForegroundNotification()
 
         Log.d("AirAlarm", "Service started")
         return START_STICKY
@@ -91,13 +92,8 @@ class AlarmService : Service(), Callback<RegionStatus> {
             return
         }
 
-        if (!status.alarmed && !alarmed) {
-            for (alarm in status.alarms) {
-                if (alarm.regionId == regionId) {
-                    changeAlarmStatus(true)
-                    return
-                }
-            }
+        if (!status.alarmed && !alarmed && status.hasAlarmedRegion(regionId)) {
+            changeAlarmStatus(true)
         }
     }
 
@@ -108,21 +104,11 @@ class AlarmService : Service(), Callback<RegionStatus> {
             .putBoolean("alarmed", alarmed)
             .apply()
 
-        val intent = Intent(ACTION_ALARM)
-            .putExtra("alarmed", alarmed)
+        notificator.displayActualNotification(alarmed)
 
         LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(intent)
-
-        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val notification = NotificationCompat.Builder(this, "alarms")
-            .setSmallIcon(R.drawable.ic_baseline_warning)
-            .setContentTitle("AIR ALARM!")
-            .setContentText("Go to the closest shelter")
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .build()
-
-        manager.notify(1, notification)
+            .sendBroadcast(Intent(ACTION_ALARM)
+                .putExtra("alarmed", alarmed))
 
         Log.i("AirAlarm", "CHANGED ALARM STATUS TO $alarmed")
     }

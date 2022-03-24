@@ -1,15 +1,14 @@
 package ua.nanit.airalarm.ui
 
-import android.content.ComponentName
+import android.app.NotificationManager
+import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,7 +20,7 @@ import ua.nanit.airalarm.AlarmView
 import ua.nanit.airalarm.R
 import ua.nanit.airalarm.receivers.AlarmReceiver
 import ua.nanit.airalarm.service.AlarmService
-import java.lang.Exception
+import ua.nanit.airalarm.service.Notificator
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 
@@ -31,11 +30,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
     private lateinit var btnSettings: FloatingActionButton
     private lateinit var btnUnsubscribe: Button
 
-    private lateinit var alarmImage: ImageView
-    private lateinit var alarmText: AppCompatTextView
+    private lateinit var statusImage: ImageView
+    private lateinit var statusTitle: TextView
+    private lateinit var statusSubtitle: AppCompatTextView
     private lateinit var regionName: TextView
     private lateinit var prefs: SharedPreferences
     private lateinit var receiver: AlarmReceiver
+    private lateinit var notifyManager: NotificationManager
 
     private var currentRegion = -1
 
@@ -52,14 +53,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
             return
         }
 
+        notifyManager = getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
         receiver = AlarmReceiver(this)
 
         rootView = findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
         btnVolume = findViewById(R.id.main_btn_volume)
         btnSettings = findViewById(R.id.main_btn_settings)
         btnUnsubscribe = findViewById(R.id.btn_unsubscribe)
-        alarmImage = findViewById(R.id.status_icon)
-        alarmText = findViewById(R.id.status_text)
+        statusImage = findViewById(R.id.status_icon)
+        statusTitle = findViewById(R.id.status_title)
+        statusSubtitle = findViewById(R.id.status_subtitle)
         regionName = findViewById(R.id.current_region)
 
         regionName.text = prefs.getString("regionName", "Region undefined")
@@ -67,6 +70,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         btnVolume.setOnClickListener(this::onClick)
         btnSettings.setOnClickListener(this::onClick)
         btnUnsubscribe.setOnClickListener(this::onClick)
+
+        notifyManager.cancel(Notificator.NOTIFICATION_ID_PUSH)
 
         val alarmed = prefs.getBoolean("alarmed", false)
 
@@ -79,19 +84,29 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(receiver, IntentFilter(AlarmService.ACTION_ALARM))
 
-        startService(Intent(this, AlarmService::class.java))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(Intent(this, AlarmService::class.java))
+        } else {
+            startService(Intent(this, AlarmService::class.java))
+        }
+
+        if (isAppKiller()) {
+            // TODO show dialog to disable app killing
+        }
     }
 
     override fun activateAlarm() {
         rootView.setBackgroundResource(R.color.danger)
-        alarmImage.setImageResource(R.drawable.ic_baseline_warning)
-        alarmText.setText(R.string.status_alarmed)
+        statusImage.setImageResource(R.drawable.ic_baseline_warning)
+        statusTitle.setText(R.string.status_alarmed_title)
+        statusSubtitle.setText(R.string.status_alarmed_subtitle)
     }
 
     override fun deactivateAlarm() {
         rootView.setBackgroundResource(R.color.success)
-        alarmImage.setImageResource(R.drawable.ic_baseline_check)
-        alarmText.setText(R.string.status_ok)
+        statusImage.setImageResource(R.drawable.ic_baseline_check)
+        statusTitle.setText(R.string.status_ok_title)
+        statusSubtitle.setText(R.string.status_ok_subtitle)
     }
 
     private fun onClick(view: View) {
@@ -122,41 +137,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         finish()
     }
 
-    private fun requestBackgroundPerms() {
-        val manufacturer = android.os.Build.MANUFACTURER
-
-        try {
-            val intent = Intent()
-
-            when {
-                "xiaomi".equals(manufacturer, true) -> {
-                    intent.component = ComponentName("com.miui.securitycenter",
-                        "com.miui.permcenter.autostart.AutoStartManagementActivity")
-                }
-                "oppo".equals(manufacturer, true) -> {
-                    intent.component = ComponentName("com.coloros.safecenter",
-                        "com.coloros.safecenter.permission.startup.StartupAppListActivity")
-                }
-                "vivo".equals(manufacturer, true) -> {
-                    intent.component = ComponentName("com.vivo.permissionmanager",
-                        "com.vivo.permissionmanager.activity.BgStartUpManagerActivity")
-                }
-                "Letv".equals(manufacturer, true) -> {
-                    intent.component = ComponentName("com.letv.android.letvsafe",
-                        "com.letv.android.letvsafe.AutobootManageActivity")
-                }
-                "Honor".equals(manufacturer, true) -> {
-                    intent.component = ComponentName("com.huawei.systemmanager",
-                        "com.huawei.systemmanager.optimize.process.ProtectActivity")
-                }
-            }
-
-            val list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-
-            if (list.size > 0)
-                startActivity(intent)
-        } catch (e: Exception) {
-            e.printStackTrace()
+    private fun isAppKiller(): Boolean {
+        return when (Build.MANUFACTURER.lowercase()) {
+            "xiaomi" -> true
+            "oppo" -> true
+            "vivo" -> true
+            "letv" -> true
+            "honor" -> true
+            "meizu" -> true
+            else -> false
         }
     }
 
