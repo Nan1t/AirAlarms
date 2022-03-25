@@ -19,6 +19,8 @@ import ua.nanit.airalarm.ui.region.RegionClickListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ua.nanit.airalarm.PREFS_KEY_REGION_ID
+import ua.nanit.airalarm.PREFS_KEY_REGION_NAME
 import ua.nanit.airalarm.Resources
 
 class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
@@ -43,8 +45,7 @@ class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
 
         btnSelectState.setOnClickListener(this::onClickSelectAll)
 
-        ApiClient.services.getRegions()
-            .enqueue(this)
+        requestRegions()
     }
 
     override fun onResponse(call: Call<Regions>, response: Response<Regions>) {
@@ -59,6 +60,7 @@ class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
 
     override fun onFailure(call: Call<Regions>, t: Throwable) {
         showFailToast(t.message ?: "")
+        requestRegions()
     }
 
     override fun onClick(region: Region) {
@@ -96,8 +98,8 @@ class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
         val prefs = Resources.getSettings(this)
 
         prefs.edit()
-            .putInt("regionId", region.id)
-            .putString("regionName", region.name)
+            .putInt(PREFS_KEY_REGION_ID, region.id)
+            .putString(PREFS_KEY_REGION_NAME, region.name)
             .apply()
 
         val intent = Intent(this, MainActivity::class.java)
@@ -140,6 +142,11 @@ class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
 
         list.adapter = RegionAdapter(districts, this)
         isStatesList = false
+    }
+
+    private fun requestRegions() {
+        ApiClient.services.getRegions()
+            .enqueue(this)
     }
 
     private fun showFailToast(msg: String) {

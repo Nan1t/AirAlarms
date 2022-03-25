@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 
         prefs = Resources.getSettings(this)
 
-        currentRegion = prefs.getInt("regionId", -1)
+        currentRegion = prefs.getInt(PREFS_KEY_REGION_ID, -1)
 
         if (currentRegion == -1) {
             openRegionsListActivity()
@@ -63,15 +63,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         statusSubtitle = findViewById(R.id.status_subtitle)
         regionName = findViewById(R.id.current_region)
 
-        regionName.text = prefs.getString("regionName", "Region undefined")
+        regionName.text = prefs.getString(PREFS_KEY_REGION_NAME, "Region undefined")
 
         btnVolume.setOnClickListener(this::onClick)
         btnSettings.setOnClickListener(this::onClick)
         btnUnsubscribe.setOnClickListener(this::onClick)
 
-        notifyManager.cancel(NOTIFICATION_ID_PUSH)
-
-        val alarmed = prefs.getBoolean("alarmed", false)
+        val alarmed = prefs.getBoolean(PREFS_KEY_ALARMED, false)
 
         if (alarmed) {
             activateAlarm()
@@ -88,9 +86,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
             startService(Intent(this, AlarmService::class.java))
         }
 
-//        if (isAppKiller()) {
+//        if (isServiceKiller()) {
 //
 //        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateVolumeIcon()
     }
 
     override fun activateAlarm() {
@@ -109,23 +112,46 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 
     private fun onClick(view: View) {
         when (view.id) {
-            R.id.main_btn_volume -> {
-                // TODO
-            }
-            R.id.main_btn_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }
-            R.id.btn_unsubscribe -> {
-                openRegionsListActivity()
-            }
+            btnVolume.id -> switchVolume()
+            btnSettings.id -> startActivity(Intent(this, SettingsActivity::class.java))
+            btnUnsubscribe.id -> openRegionsListActivity()
+        }
+    }
+
+    private fun switchVolume() {
+        val volume = prefs.getInt(PREFS_KEY_VOLUME, VOLUME_DEFAULT)
+
+        if (volume == 0) {
+            val saved = prefs.getInt(PREFS_KEY_VOLUME_SAVED, VOLUME_DEFAULT)
+
+            prefs.edit()
+                .putInt(PREFS_KEY_VOLUME, saved)
+                .apply()
+        } else {
+            prefs.edit()
+                .putInt(PREFS_KEY_VOLUME_SAVED, volume)
+                .putInt(PREFS_KEY_VOLUME, 0)
+                .apply()
+        }
+
+        updateVolumeIcon()
+    }
+
+    private fun updateVolumeIcon() {
+        val volume = prefs.getInt(PREFS_KEY_VOLUME, VOLUME_DEFAULT)
+
+        if (volume == 0) {
+            btnVolume.setImageResource(R.drawable.ic_baseline_volume_off)
+        } else {
+            btnVolume.setImageResource(R.drawable.ic_baseline_volume_up)
         }
     }
 
     private fun openRegionsListActivity() {
         prefs.edit()
-            .remove("alarmed")
-            .remove("regionId")
-            .remove("regionName")
+            .remove(PREFS_KEY_ALARMED)
+            .remove(PREFS_KEY_REGION_ID)
+            .remove(PREFS_KEY_REGION_NAME)
             .apply()
 
         stopService(Intent(this, AlarmService::class.java))
@@ -135,7 +161,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         finish()
     }
 
-//    private fun isAppKiller(): Boolean {
+//    private fun isServiceKiller(): Boolean {
 //        return when (Build.MANUFACTURER.lowercase()) {
 //            "xiaomi" -> true
 //            "oppo" -> true

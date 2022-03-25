@@ -5,8 +5,10 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import ua.nanit.airalarm.PREFS_KEY_VIBRATION
+import ua.nanit.airalarm.Resources
 
-class VibrationAlarm(ctx: Context) : Alarm {
+class VibrationAlarm(private val ctx: Context) : Alarm {
 
     companion object {
         private val effectAlarm = longArrayOf(
@@ -14,20 +16,29 @@ class VibrationAlarm(ctx: Context) : Alarm {
             100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 1000
         )
 
-        private val effectCancel = longArrayOf(
+        private val effectAllClear = longArrayOf(
             300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80,
             300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80
         )
     }
 
     private val vibrator = ctx.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
+    private val prefs = Resources.getSettings(ctx)
 
     override fun alarm() {
-        vibrate(effectAlarm)
+        val enabled = prefs.getBoolean(PREFS_KEY_VIBRATION, true)
+
+        if (enabled) {
+            vibrate(effectAlarm)
+        }
     }
 
-    override fun cancelAlarm() {
-        vibrate(effectCancel)
+    override fun allClear() {
+        val enabled = prefs.getBoolean(PREFS_KEY_VIBRATION, true)
+
+        if (enabled) {
+            vibrate(effectAllClear)
+        }
     }
 
     private fun vibrate(effect: LongArray) {

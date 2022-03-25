@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreferenceCompat
+        app:key="vibration"
+        app:title="@string/settings_vibration_title"
+        app:summary="@string/settings_vibration_summary"
+        app:icon="@drawable/ic_baseline_vibration"
+        app:defaultValue="true" />
+
+    <SeekBarPreference
+        app:key="volume"
+        app:min="0"
+        android:max="100"
+        app:title="@string/settings_volume_title"
+        app:summary="@string/settings_volume_summary"
+        app:icon="@drawable/ic_baseline_volume_up"
+        app:defaultValue="70" />
+
+    <Preference app:title="@string/settings_licenses" />
+
+</PreferenceScreen>

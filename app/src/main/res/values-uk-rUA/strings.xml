@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Повітряна тривога UA</string>
+
+    <!--  Statuses  -->
+    <string name="status_ok_title">Поки все добре</string>
+    <string name="status_ok_subtitle">Слідкуйте за повідомленнями</string>
+    <string name="status_alarmed_title">Увага! Тривога!</string>
+    <string name="status_alarmed_subtitle">Прямуйте до найближчого укриття!</string>
+
+    <!--  Regions activity  -->
+    <string name="regions_title_state">Обрати область</string>
+    <string name="regions_title_district">Обрати район</string>
+    <string name="regions_select_state">Обрати всю область</string>
+
+    <!--  Main activity  -->
+    <string name="main_unsubscribe">Обрати інший регіон</string>
+    <string name="main_volume">Гучність</string>
+    <string name="main_settings">Налаштування</string>
+
+    <!--  Settings activity  -->
+    <string name="settings_title">Налаштування</string>
+    <string name="settings_language">Мова</string>
+    <string name="settings_vibration_title">Вібрація</string>
+    <string name="settings_vibration_summary">Вібрація допоможе вам краще почути сигнал тривоги</string>
+    <string name="settings_volume_title">Гучність сигналу</string>
+    <string name="settings_volume_summary">Гучність сигналів тривоги та відбою</string>
+    <string name="settings_ringtone_alarm">Рингтон тривоги</string>
+    <string name="settings_ringtone_all_clear">Рингтон відбою</string>
+    <string name="settings_ringtone_default">За замовченням</string>
+    <string name="settings_licenses">Ліцензії відкритого ПО</string>
+</resources>

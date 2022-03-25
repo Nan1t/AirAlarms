@@ -4,6 +4,6 @@ interface Alarm {
 
     fun alarm()
 
-    fun cancelAlarm()
+    fun allClear()
 
 }

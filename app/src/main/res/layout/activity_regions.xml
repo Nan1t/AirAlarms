@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp"
-        android:text="@string/regions_select_whole" />
+        android:text="@string/regions_select_state" />
 
     <ProgressBar
         android:id="@+id/regions_progressbar"

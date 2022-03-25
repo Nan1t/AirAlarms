@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Воздушная тревога UA</string>
+
+    <!--  Statuses  -->
+    <string name="status_ok_title">Пока все хорошо</string>
+    <string name="status_ok_subtitle">Следите за сообщениями</string>
+    <string name="status_alarmed_title">Внимание! Тревога!</string>
+    <string name="status_alarmed_subtitle">Направляйтесь к ближайшему укрытию!</string>
+
+    <!--  Regions activity  -->
+    <string name="regions_title_state">Выберите область</string>
+    <string name="regions_title_district">Выберите район</string>
+    <string name="regions_select_state">Выбрать всю область</string>
+
+    <!--  Main activity  -->
+    <string name="main_unsubscribe">Выбрать другой регион</string>
+    <string name="main_volume">Звук</string>
+    <string name="main_settings">Настройки</string>
+
+    <!--  Settings activity  -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_vibration_title">Вибрация</string>
+    <string name="settings_vibration_summary">Вибрация повышает шанс услышать сингал тревоги</string>
+    <string name="settings_volume_title">Громкость сигнала</string>
+    <string name="settings_volume_summary">Громкость сингалов тревоги и отбоя</string>
+    <string name="settings_ringtone_alarm">Рингтон тревоги</string>
+    <string name="settings_ringtone_all_clear">Рингтон отбоя тревоги</string>
+    <string name="settings_ringtone_default">По-умолчанию</string>
+    <string name="settings_licenses">Лицензии открытого ПО</string>
+</resources>

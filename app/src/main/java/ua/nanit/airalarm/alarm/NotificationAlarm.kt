@@ -1,62 +1,63 @@
 package ua.nanit.airalarm.alarm
 
 import android.app.*
-import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import ua.nanit.airalarm.NOTIFICATION_CHANNEL
-import ua.nanit.airalarm.NOTIFICATION_ID_PUSH
+import ua.nanit.airalarm.NOTIFICATION_ID_MAIN
 import ua.nanit.airalarm.R
+import ua.nanit.airalarm.ui.MainActivity
 
-class NotificationAlarm(private val ctx: Context) : Alarm {
+class NotificationAlarm(private val service: Service) : Alarm {
 
-    private val notifyManager = ctx.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
-    private val imgAlarmOn = BitmapFactory.decodeResource(ctx.resources, R.drawable.alarm_on)
-    private val imgAlarmOff = BitmapFactory.decodeResource(ctx.resources, R.drawable.alarm_off)
+    private val imgAlarmOn = BitmapFactory.decodeResource(service.resources, R.drawable.alarm_on)
+    private val imgAlarmOff = BitmapFactory.decodeResource(service.resources, R.drawable.alarm_off)
 
     override fun alarm() {
-        notifyManager.notify(NOTIFICATION_ID_PUSH, getNotifyAlarm())
+        service.startForeground(NOTIFICATION_ID_MAIN, getNotifyAlarm())
     }
 
-    override fun cancelAlarm() {
-        notifyManager.notify(NOTIFICATION_ID_PUSH, getNotifyCancel())
+    override fun allClear() {
+        service.startForeground(NOTIFICATION_ID_MAIN, getNotifyCancel())
     }
 
     private fun getNotifyAlarm(): Notification {
-        val builder = NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL)
+        val builder = NotificationCompat.Builder(service, NOTIFICATION_CHANNEL)
 
         builder.priority = NotificationCompat.PRIORITY_MAX
-        builder.color = ctx.resources.getColor(R.color.danger)
+        builder.color = service.resources.getColor(R.color.danger)
         builder.setCategory(Notification.CATEGORY_ALARM)
-        builder.setChannelId("Alarm")
+        builder.setChannelId(NotificationChannel.EDIT_IMPORTANCE)
         builder.setSmallIcon(R.drawable.ic_baseline_warning)
         builder.setLargeIcon(imgAlarmOn)
-        builder.setContentTitle(ctx.getString(R.string.status_alarmed_title))
-        builder.setContentText(ctx.getString(R.string.status_alarmed_subtitle))
-        builder.setWhen(System.currentTimeMillis())
-        builder.setLights(Color.RED, 400, 200)
-        builder.setAutoCancel(true)
+        builder.setContentTitle(service.getString(R.string.status_alarmed_title))
+        builder.setContentText(service.getString(R.string.status_alarmed_subtitle))
+        builder.setContentIntent(getIntent())
 
         return builder.build()
     }
 
     private fun getNotifyCancel(): Notification {
-        val builder = NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL)
+        val builder = NotificationCompat.Builder(service, NOTIFICATION_CHANNEL)
 
         builder.priority = NotificationCompat.PRIORITY_MAX
-        builder.color = ctx.resources.getColor(R.color.success)
+        builder.color = service.resources.getColor(R.color.success)
         builder.setCategory(Notification.CATEGORY_ALARM)
         builder.setChannelId(NotificationChannel.EDIT_IMPORTANCE)
         builder.setSmallIcon(R.drawable.ic_baseline_check)
         builder.setLargeIcon(imgAlarmOff)
-        builder.setContentTitle(ctx.getString(R.string.alarm_cancelled))
-        builder.setContentText(ctx.getString(R.string.status_ok_subtitle))
-        builder.setWhen(System.currentTimeMillis())
-        builder.setLights(Color.GREEN, 400, 200)
-        builder.setAutoCancel(true)
+        builder.setContentTitle(service.getString(R.string.status_ok_title))
+        builder.setContentText(service.getString(R.string.status_ok_subtitle))
+        builder.setContentIntent(getIntent())
 
         return builder.build()
+    }
+
+    private fun getIntent(): PendingIntent {
+        return PendingIntent.getActivity(service,
+            0, Intent(service, MainActivity::class.java)
+                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0)
     }
 
 }

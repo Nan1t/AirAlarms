@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ua.nanit.airalarm">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -26,7 +27,10 @@
         </activity>
 
         <activity android:name=".ui.RegionsActivity" />
-        <activity android:name=".ui.SettingsActivity" />
+
+        <activity android:name=".ui.SettingsActivity"
+            android:label="@string/settings_title"
+            android:parentActivityName=".ui.MainActivity"/>
 
         <service android:name=".service.AlarmService"
             android:enabled="true"
@@ -35,7 +39,8 @@
         <receiver android:name=".receivers.BootReceiver"
             android:directBootAware="true"
             android:exported="false"
-            android:enabled="true">
+            android:enabled="true"
+            tools:targetApi="n">
 
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
