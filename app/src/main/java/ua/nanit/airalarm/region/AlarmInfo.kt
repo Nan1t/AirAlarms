@@ -1,6 +1,6 @@
 package ua.nanit.airalarm.region
 
-data class Alarm(
+data class AlarmInfo(
     val type: RegionType,
     val regionId: Int,
     val districtId: Int?,

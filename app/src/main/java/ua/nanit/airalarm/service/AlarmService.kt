@@ -5,26 +5,26 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.IBinder
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ua.nanit.airalarm.*
+import ua.nanit.airalarm.alarm.*
 import ua.nanit.airalarm.api.ApiClient
 import ua.nanit.airalarm.region.RegionStatus
+import ua.nanit.airalarm.ui.MainActivity
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
 class AlarmService : Service(), Callback<RegionStatus> {
 
-    companion object {
-        const val ACTION_ALARM = "ua.nanit.airalarm.ACTION_ALARM"
-    }
-
     private val executor = Executors.newSingleThreadScheduledExecutor()
 
     private lateinit var prefs: SharedPreferences
-    private lateinit var notificator: Notificator
+    private lateinit var alarm: Alarm
 
     private var task: ScheduledFuture<*>? = null
     private var regionId = -1
@@ -32,8 +32,12 @@ class AlarmService : Service(), Callback<RegionStatus> {
 
     override fun onCreate() {
         super.onCreate()
-        prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        notificator = Notificator(this)
+        prefs = Resources.getSettings(this)
+        alarm = MultipleAlarm(
+            NotificationAlarm(this),
+            VibrationAlarm(this),
+            SoundAlarm(this)
+        )
         Log.d("AirAlarm", "Service created")
     }
 
@@ -46,28 +50,45 @@ class AlarmService : Service(), Callback<RegionStatus> {
                 0, 5, TimeUnit.SECONDS)
         }
 
-        notificator.startForegroundNotification()
+        val pIntent = PendingIntent.getActivity(this,
+            0, Intent(this, MainActivity::class.java)
+                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0)
+
+        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setContentIntent(pIntent)
+
+        notification.setSmallIcon(R.drawable.ic_megaphone)
+        notification.setContentTitle(this.getString(R.string.service_notification_title))
+        notification.setContentText(this.getString(R.string.service_notification_subtitle))
+
+        startForeground(NOTIFICATION_ID_MAIN, notification.build())
 
         Log.d("AirAlarm", "Service started")
         return START_STICKY
     }
 
     override fun onDestroy() {
-        Log.d("AirAlarm", "Service stopping")
         super.onDestroy()
         task?.cancel(true)
         executor.shutdown()
         Log.d("AirAlarm", "Service stopped")
     }
 
-    override fun onBind(p0: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onResponse(call: Call<RegionStatus>, response: Response<RegionStatus>) {
         val status = response.body()
 
         if (status != null) {
-            Log.d("AirAlarm", "Get status: $status")
-            checkStatus(status)
+            if (!status.alarmed && !alarmed && status.hasAlarmedRegion(regionId)) {
+                alarm()
+            }
+
+            if (status.alarmed && alarmed && !status.hasAlarmedRegion(regionId)) {
+                cancelAlarm()
+                return
+            }
         } else {
             Log.d("AirAlarm", "Status body is null!")
         }
@@ -82,34 +103,37 @@ class AlarmService : Service(), Callback<RegionStatus> {
             ApiClient.services.checkStatus(regionId)
                 .enqueue(this)
         } else {
-            Log.d("AirAlarm", "Region not selected")
+            Log.d("AirAlarm", "Region is not selected")
         }
     }
 
-    private fun checkStatus(status: RegionStatus) {
-        if (status.alarmed && alarmed) {
-            changeAlarmStatus(false)
-            return
-        }
-
-        if (!status.alarmed && !alarmed && status.hasAlarmedRegion(regionId)) {
-            changeAlarmStatus(true)
-        }
+    private fun alarm() {
+        this.alarmed = true
+        saveToPrefs()
+        broadcastStatus()
+        alarm.alarm()
     }
 
-    private fun changeAlarmStatus(alarmed: Boolean) {
-        this.alarmed = alarmed
+    private fun cancelAlarm() {
+        this.alarmed = false
+        saveToPrefs()
+        broadcastStatus()
+        alarm.cancelAlarm()
+    }
 
+    private fun broadcastStatus() {
+        LocalBroadcastManager.getInstance(this)
+            .sendBroadcast(Intent(ACTION_ALARM)
+                .putExtra("alarmed", alarmed))
+    }
+
+    private fun saveToPrefs() {
         prefs.edit()
             .putBoolean("alarmed", alarmed)
             .apply()
 
-        notificator.displayActualNotification(alarmed)
-
-        LocalBroadcastManager.getInstance(this)
-            .sendBroadcast(Intent(ACTION_ALARM)
-                .putExtra("alarmed", alarmed))
-
-        Log.i("AirAlarm", "CHANGED ALARM STATUS TO $alarmed")
+        Log.i("AirAlarm", "Alarm status changed to $alarmed")
     }
+
+
 }

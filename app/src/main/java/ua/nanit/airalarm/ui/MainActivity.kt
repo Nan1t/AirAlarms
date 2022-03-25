@@ -16,11 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ua.nanit.airalarm.AlarmView
-import ua.nanit.airalarm.R
+import ua.nanit.airalarm.*
 import ua.nanit.airalarm.receivers.AlarmReceiver
 import ua.nanit.airalarm.service.AlarmService
-import ua.nanit.airalarm.service.Notificator
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
 
-        prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        prefs = Resources.getSettings(this)
 
         currentRegion = prefs.getInt("regionId", -1)
 
@@ -71,7 +69,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         btnSettings.setOnClickListener(this::onClick)
         btnUnsubscribe.setOnClickListener(this::onClick)
 
-        notifyManager.cancel(Notificator.NOTIFICATION_ID_PUSH)
+        notifyManager.cancel(NOTIFICATION_ID_PUSH)
 
         val alarmed = prefs.getBoolean("alarmed", false)
 
@@ -82,7 +80,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         }
 
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver(receiver, IntentFilter(AlarmService.ACTION_ALARM))
+            .registerReceiver(receiver, IntentFilter(ACTION_ALARM))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(Intent(this, AlarmService::class.java))
@@ -90,9 +88,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
             startService(Intent(this, AlarmService::class.java))
         }
 
-        if (isAppKiller()) {
-            // TODO show dialog to disable app killing
-        }
+//        if (isAppKiller()) {
+//
+//        }
     }
 
     override fun activateAlarm() {
@@ -118,18 +116,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
                 startActivity(Intent(this, SettingsActivity::class.java))
             }
             R.id.btn_unsubscribe -> {
-                prefs.edit()
-                    .remove("alarmed")
-                    .remove("regionId")
-                    .remove("regionName")
-                    .apply()
-
                 openRegionsListActivity()
             }
         }
     }
 
     private fun openRegionsListActivity() {
+        prefs.edit()
+            .remove("alarmed")
+            .remove("regionId")
+            .remove("regionName")
+            .apply()
+
         stopService(Intent(this, AlarmService::class.java))
         val intent = Intent(this, RegionsActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -137,16 +135,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         finish()
     }
 
-    private fun isAppKiller(): Boolean {
-        return when (Build.MANUFACTURER.lowercase()) {
-            "xiaomi" -> true
-            "oppo" -> true
-            "vivo" -> true
-            "letv" -> true
-            "honor" -> true
-            "meizu" -> true
-            else -> false
-        }
-    }
+//    private fun isAppKiller(): Boolean {
+//        return when (Build.MANUFACTURER.lowercase()) {
+//            "xiaomi" -> true
+//            "oppo" -> true
+//            "vivo" -> true
+//            "letv" -> true
+//            "honor" -> true
+//            "meizu" -> true
+//            else -> false
+//        }
+//    }
 
 }

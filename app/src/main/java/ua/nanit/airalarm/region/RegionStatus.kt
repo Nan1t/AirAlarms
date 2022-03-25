@@ -2,13 +2,15 @@ package ua.nanit.airalarm.region
 
 data class RegionStatus(
     val alarmed: Boolean,
-    val alarms: List<Alarm>
+    val alarms: List<AlarmInfo>?
 ) {
 
     fun hasAlarmedRegion(regionId: Int): Boolean {
-        for (alarm in alarms) {
-            if (alarm.regionId == regionId) {
-                return true
+        if (alarms != null) {
+            for (alarm in alarms) {
+                if (alarm.regionId == regionId) {
+                    return true
+                }
             }
         }
         return false

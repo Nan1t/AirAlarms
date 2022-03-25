@@ -19,6 +19,7 @@ import ua.nanit.airalarm.ui.region.RegionClickListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ua.nanit.airalarm.Resources
 
 class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
     Callback<Regions>,
@@ -92,7 +93,7 @@ class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
     }
 
     private fun selectRegion(region: Region) {
-        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        val prefs = Resources.getSettings(this)
 
         prefs.edit()
             .putInt("regionId", region.id)
