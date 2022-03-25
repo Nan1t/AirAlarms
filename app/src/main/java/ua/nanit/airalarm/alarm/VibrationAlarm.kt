@@ -41,6 +41,10 @@ class VibrationAlarm(private val ctx: Context) : Alarm {
         }
     }
 
+    override fun stop() {
+        vibrator.cancel()
+    }
+
     private fun vibrate(effect: LongArray) {
         if (Build.VERSION.SDK_INT >= 26) {
             vibrator.vibrate(VibrationEffect.createWaveform(effect, -1))

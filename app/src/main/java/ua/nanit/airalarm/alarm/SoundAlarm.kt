@@ -57,13 +57,21 @@ class SoundAlarm(private val ctx: Context) : Alarm {
         player.prepareAsync()
     }
 
+    override fun stop() {
+        stop(player)
+    }
+
     private fun play(player: MediaPlayer) {
-        player.start()
+        if (!player.isPlaying) {
+            player.start()
+        }
     }
 
     private fun stop(player: MediaPlayer) {
-        player.stop()
-        player.reset()
+        if (player.isPlaying) {
+            player.stop()
+            player.reset()
+        }
     }
 
     private fun onPrepared(player: MediaPlayer) {

@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Повітряна тривога UA</string>
 
+    <string name="notification_btn_mute">Вимкнути сингал</string>
+
     <!--  Statuses  -->
     <string name="status_ok_title">Поки все добре</string>
     <string name="status_ok_subtitle">Слідкуйте за повідомленнями</string>
@@ -15,7 +17,6 @@
 
     <!--  Main activity  -->
     <string name="main_unsubscribe">Обрати інший регіон</string>
-    <string name="main_volume">Гучність</string>
     <string name="main_settings">Налаштування</string>
 
     <!--  Settings activity  -->

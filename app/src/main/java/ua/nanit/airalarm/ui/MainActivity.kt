@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 
     private lateinit var rootView: View
 
-    private lateinit var btnVolume: FloatingActionButton
     private lateinit var btnSettings: FloatingActionButton
     private lateinit var btnUnsubscribe: Button
 
@@ -55,7 +54,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         receiver = AlarmReceiver(this)
 
         rootView = findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
-        btnVolume = findViewById(R.id.main_btn_volume)
         btnSettings = findViewById(R.id.main_btn_settings)
         btnUnsubscribe = findViewById(R.id.btn_unsubscribe)
         statusImage = findViewById(R.id.status_icon)
@@ -65,7 +63,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 
         regionName.text = prefs.getString(PREFS_KEY_REGION_NAME, "Region undefined")
 
-        btnVolume.setOnClickListener(this::onClick)
         btnSettings.setOnClickListener(this::onClick)
         btnUnsubscribe.setOnClickListener(this::onClick)
 
@@ -91,11 +88,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 //        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateVolumeIcon()
-    }
-
     override fun activateAlarm() {
         rootView.setBackgroundResource(R.color.danger)
         statusImage.setImageResource(R.drawable.ic_baseline_warning)
@@ -112,38 +104,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
 
     private fun onClick(view: View) {
         when (view.id) {
-            btnVolume.id -> switchVolume()
             btnSettings.id -> startActivity(Intent(this, SettingsActivity::class.java))
             btnUnsubscribe.id -> openRegionsListActivity()
-        }
-    }
-
-    private fun switchVolume() {
-        val volume = prefs.getInt(PREFS_KEY_VOLUME, VOLUME_DEFAULT)
-
-        if (volume == 0) {
-            val saved = prefs.getInt(PREFS_KEY_VOLUME_SAVED, VOLUME_DEFAULT)
-
-            prefs.edit()
-                .putInt(PREFS_KEY_VOLUME, saved)
-                .apply()
-        } else {
-            prefs.edit()
-                .putInt(PREFS_KEY_VOLUME_SAVED, volume)
-                .putInt(PREFS_KEY_VOLUME, 0)
-                .apply()
-        }
-
-        updateVolumeIcon()
-    }
-
-    private fun updateVolumeIcon() {
-        val volume = prefs.getInt(PREFS_KEY_VOLUME, VOLUME_DEFAULT)
-
-        if (volume == 0) {
-            btnVolume.setImageResource(R.drawable.ic_baseline_volume_off)
-        } else {
-            btnVolume.setImageResource(R.drawable.ic_baseline_volume_up)
         }
     }
 

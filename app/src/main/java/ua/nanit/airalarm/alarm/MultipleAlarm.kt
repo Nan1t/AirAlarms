@@ -9,4 +9,8 @@ class MultipleAlarm(private vararg val alarms: Alarm): Alarm {
     override fun allClear() {
         alarms.forEach(Alarm::allClear)
     }
+
+    override fun stop() {
+        alarms.forEach(Alarm::stop)
+    }
 }

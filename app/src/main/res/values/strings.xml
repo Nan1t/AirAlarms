@@ -6,6 +6,8 @@
     <string name="lang_ua" translatable="false">Українська</string>
     <string name="lang_ru" translatable="false">Русский</string>
 
+    <string name="notification_btn_mute">Mute signal</string>
+
     <!--  Statuses  -->
     <string name="status_ok_title">All okay yet</string>
     <string name="status_ok_subtitle">Watch out for updates</string>
@@ -19,7 +21,6 @@
 
     <!--  Main activity  -->
     <string name="main_unsubscribe">Select other region</string>
-    <string name="main_volume">Volume</string>
     <string name="main_settings">Settings</string>
 
     <!--  Settings activity  -->

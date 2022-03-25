@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Воздушная тревога UA</string>
 
+    <string name="notification_btn_mute">Заглушить сигнал</string>
+
     <!--  Statuses  -->
     <string name="status_ok_title">Пока все хорошо</string>
     <string name="status_ok_subtitle">Следите за сообщениями</string>
@@ -15,7 +17,6 @@
 
     <!--  Main activity  -->
     <string name="main_unsubscribe">Выбрать другой регион</string>
-    <string name="main_volume">Звук</string>
     <string name="main_settings">Настройки</string>
 
     <!--  Settings activity  -->

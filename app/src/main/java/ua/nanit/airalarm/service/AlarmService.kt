@@ -19,10 +19,14 @@ import java.util.concurrent.TimeUnit
 
 class AlarmService : Service(), Callback<RegionStatus> {
 
+    companion object {
+        const val CMD_STOP_SIGNAL = "stop_signal"
+    }
+
     private val executor = Executors.newSingleThreadScheduledExecutor()
 
     private lateinit var prefs: SharedPreferences
-    private lateinit var notificationAlarm: Alarm
+    private lateinit var notificationAlarm: NotificationAlarm
     private lateinit var alarm: Alarm
 
     private var task: ScheduledFuture<*>? = null
@@ -45,15 +49,21 @@ class AlarmService : Service(), Callback<RegionStatus> {
         regionId = prefs.getInt(PREFS_KEY_REGION_ID, -1)
         alarmed = prefs.getBoolean(PREFS_KEY_ALARMED, false)
 
-        if (task == null) {
-            task = executor.scheduleWithFixedDelay(this::checkForAlarm,
-                0, 5, TimeUnit.SECONDS)
+        val stopSignal = intent?.extras?.get(CMD_STOP_SIGNAL)
+
+        if (stopSignal != null) {
+            alarm.stop()
         }
 
         if (alarmed && regionId != -1) {
-            notificationAlarm.alarm()
+            notificationAlarm.alarm(stopSignal == null)
         } else {
-            notificationAlarm.allClear()
+            notificationAlarm.allClear(stopSignal == null)
+        }
+
+        if (task == null) {
+            task = executor.scheduleWithFixedDelay(this::checkForAlarm,
+                0, 5, TimeUnit.SECONDS)
         }
 
         Log.d("AirAlarm", "Service started")

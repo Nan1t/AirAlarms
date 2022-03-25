@@ -1,63 +1,46 @@
 package ua.nanit.airalarm.alarm
 
 import android.app.*
-import android.content.Intent
 import android.graphics.BitmapFactory
-import androidx.core.app.NotificationCompat
-import ua.nanit.airalarm.NOTIFICATION_CHANNEL
 import ua.nanit.airalarm.NOTIFICATION_ID_MAIN
 import ua.nanit.airalarm.R
-import ua.nanit.airalarm.ui.MainActivity
+import ua.nanit.airalarm.alarm.notification.AlarmNotification
+import ua.nanit.airalarm.alarm.notification.AllClearNotification
 
 class NotificationAlarm(private val service: Service) : Alarm {
 
     private val imgAlarmOn = BitmapFactory.decodeResource(service.resources, R.drawable.alarm_on)
     private val imgAlarmOff = BitmapFactory.decodeResource(service.resources, R.drawable.alarm_off)
 
+    private val notifyAlarm = AlarmNotification(service, false, imgAlarmOn)
+        .build()
+    private val notifyAlarmMute = AlarmNotification(service, true, imgAlarmOn)
+        .build()
+    private val notifyAllClear = AllClearNotification(service, false, imgAlarmOff)
+        .build()
+    private val notifyAllClearMute = AllClearNotification(service, true, imgAlarmOff)
+        .build()
+
     override fun alarm() {
-        service.startForeground(NOTIFICATION_ID_MAIN, getNotifyAlarm())
+        service.startForeground(NOTIFICATION_ID_MAIN, notifyAlarmMute)
     }
 
     override fun allClear() {
-        service.startForeground(NOTIFICATION_ID_MAIN, getNotifyCancel())
+        service.startForeground(NOTIFICATION_ID_MAIN, notifyAllClearMute)
     }
 
-    private fun getNotifyAlarm(): Notification {
-        val builder = NotificationCompat.Builder(service, NOTIFICATION_CHANNEL)
-
-        builder.priority = NotificationCompat.PRIORITY_MAX
-        builder.color = service.resources.getColor(R.color.danger)
-        builder.setCategory(Notification.CATEGORY_ALARM)
-        builder.setChannelId(NotificationChannel.EDIT_IMPORTANCE)
-        builder.setSmallIcon(R.drawable.ic_baseline_warning)
-        builder.setLargeIcon(imgAlarmOn)
-        builder.setContentTitle(service.getString(R.string.status_alarmed_title))
-        builder.setContentText(service.getString(R.string.status_alarmed_subtitle))
-        builder.setContentIntent(getIntent())
-
-        return builder.build()
+    override fun stop() {
+        // Ignore for notifications
     }
 
-    private fun getNotifyCancel(): Notification {
-        val builder = NotificationCompat.Builder(service, NOTIFICATION_CHANNEL)
-
-        builder.priority = NotificationCompat.PRIORITY_MAX
-        builder.color = service.resources.getColor(R.color.success)
-        builder.setCategory(Notification.CATEGORY_ALARM)
-        builder.setChannelId(NotificationChannel.EDIT_IMPORTANCE)
-        builder.setSmallIcon(R.drawable.ic_baseline_check)
-        builder.setLargeIcon(imgAlarmOff)
-        builder.setContentTitle(service.getString(R.string.status_ok_title))
-        builder.setContentText(service.getString(R.string.status_ok_subtitle))
-        builder.setContentIntent(getIntent())
-
-        return builder.build()
+    fun alarm(withAction: Boolean) {
+        val notification = if (withAction) notifyAlarmMute else notifyAlarm
+        service.startForeground(NOTIFICATION_ID_MAIN, notification)
     }
 
-    private fun getIntent(): PendingIntent {
-        return PendingIntent.getActivity(service,
-            0, Intent(service, MainActivity::class.java)
-                .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0)
+    fun allClear(withAction: Boolean) {
+        val notification = if (withAction) notifyAllClearMute else notifyAllClear
+        service.startForeground(NOTIFICATION_ID_MAIN, notification)
     }
 
 }
