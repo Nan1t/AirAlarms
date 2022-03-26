@@ -30,12 +30,16 @@
     <DropDownPreference
         app:key="sound_alarm"
         app:title="@string/settings_ringtone_alarm"
-        app:icon="@drawable/ic_baseline_music_note" />
+        app:summary="@string/settings_ringtone_default"
+        app:icon="@drawable/ic_baseline_music_note"
+        app:defaultValue="default"/>
 
     <DropDownPreference
         app:key="sound_all_clear"
         app:title="@string/settings_ringtone_all_clear"
-        app:icon="@drawable/ic_baseline_music_note" />
+        app:summary="@string/settings_ringtone_default"
+        app:icon="@drawable/ic_baseline_music_note"
+        app:defaultValue="default" />
 
     <Preference app:title="@string/settings_licenses" />
 </PreferenceScreen>

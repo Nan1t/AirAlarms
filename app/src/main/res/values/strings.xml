@@ -23,6 +23,7 @@
     <!--  Settings activity  -->
     <string name="settings_title">Settings</string>
     <string name="settings_language">Language</string>
+    <string name="settings_language_reload">Language will be applied only after application restart</string>
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_vibration_summary">Vibration increases chance to notice alarm</string>
     <string name="settings_volume_title">Alert volume</string>

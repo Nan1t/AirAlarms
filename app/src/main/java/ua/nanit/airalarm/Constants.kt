@@ -5,6 +5,7 @@ const val NOTIFICATION_ID_MAIN = 1
 const val NOTIFICATION_CHANNEL = "importance"
 
 const val VOLUME_DEFAULT = 70
+const val SOUND_DEFAULT = "default"
 
 const val PREFS_KEY_VOLUME = "volume"
 const val PREFS_KEY_VIBRATION = "vibration"

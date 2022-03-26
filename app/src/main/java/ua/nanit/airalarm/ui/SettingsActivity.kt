@@ -2,12 +2,11 @@ package ua.nanit.airalarm.ui
 
 import android.os.Bundle
 import ua.nanit.airalarm.R
-import ua.nanit.airalarm.util.Resources
 import ua.nanit.airalarm.ui.fragment.SettingsFragment
 
 class SettingsActivity : LocalizedActivity(R.layout.activity_settings) {
 
-    val fragment = SettingsFragment()
+    private val fragment = SettingsFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +17,6 @@ class SettingsActivity : LocalizedActivity(R.layout.activity_settings) {
             .beginTransaction()
             .replace(R.id.settings_container, fragment)
             .commit()
-
-        Resources.getSettings(this)
-            .registerOnSharedPreferenceChangeListener(fragment::onPreferenceChanged)
     }
 
 }

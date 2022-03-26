@@ -4,12 +4,11 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Build
 import android.util.Log
-import ua.nanit.airalarm.PREFS_KEY_VOLUME
-import ua.nanit.airalarm.R
+import ua.nanit.airalarm.*
 import ua.nanit.airalarm.util.Resources
-import ua.nanit.airalarm.VOLUME_DEFAULT
 import kotlin.math.ceil
 
 class SoundAlarm(private val ctx: Context) : Alarm {
@@ -21,10 +20,9 @@ class SoundAlarm(private val ctx: Context) : Alarm {
     
     private val audioManager = ctx.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private val prefs = Resources.getSettings(ctx)
-    private val alarmUri = Resources.getResUri(ctx, R.raw.alarm_siren)
-    private val allClearUri = Resources.getResUri(ctx, R.raw.watch_digital_alarm)
     private val player = MediaPlayer()
     private var userVolume = 0
+    var released = false
 
     init {
         if (Build.VERSION.SDK_INT >= 26) {
@@ -38,50 +36,48 @@ class SoundAlarm(private val ctx: Context) : Alarm {
         }
 
         player.setOnCompletionListener(this::onCompletion)
-        player.setOnPreparedListener(this::onPrepared)
     }
 
     override fun alarm() {
-        if (getVolumeFromPrefs() <= 0) return
+        if (released) return
+        if (getVolumeFromPrefs() < 1) return
 
+        val uri = getSavedSound(PREFS_KEY_SOUND_ALARM, R.raw.alarm_siren)
+
+        stop()
+        setupVolume()
         player.reset()
-        player.setDataSource(ctx, alarmUri)
-        player.prepareAsync()
+        player.setDataSource(ctx, uri)
+        player.prepare()
+        player.start()
     }
 
     override fun allClear() {
-        if (getVolumeFromPrefs() <= 0) return
+        if (released) return
+        if (getVolumeFromPrefs() < 1) return
 
+        val uri = getSavedSound(PREFS_KEY_SOUND_ALL_CLEAR, R.raw.watch_digital_alarm)
+
+        stop()
+        setupVolume()
         player.reset()
-        player.setDataSource(ctx, allClearUri)
-        player.prepareAsync()
+        player.setDataSource(ctx, uri)
+        player.prepare()
+        player.start()
     }
 
     override fun stop() {
-        stop(player)
+        player.stop()
     }
 
-    private fun play(player: MediaPlayer) {
-        if (!player.isPlaying) {
-            player.start()
-        }
-    }
-
-    private fun stop(player: MediaPlayer) {
-        if (player.isPlaying) {
-            player.stop()
-            player.reset()
-        }
-    }
-
-    private fun onPrepared(player: MediaPlayer) {
-        setupVolume()
-        play(player)
+    fun release() {
+        stop()
+        player.release()
+        released = true
     }
 
     private fun onCompletion(player: MediaPlayer) {
         restoreVolume()
-        stop(player)
     }
 
     private fun setupVolume() {
@@ -102,5 +98,15 @@ class SoundAlarm(private val ctx: Context) : Alarm {
 
     private fun getVolumeFromPrefs(): Int {
         return prefs.getInt(PREFS_KEY_VOLUME, VOLUME_DEFAULT)
+    }
+
+    private fun getSavedSound(prefsKey: String, defSoundId: Int): Uri {
+        val rawUri = prefs.getString(prefsKey, SOUND_DEFAULT)
+
+        return if (rawUri == SOUND_DEFAULT) {
+            Resources.getResUri(ctx, defSoundId)
+        } else {
+            Uri.parse(rawUri)
+        }
     }
 }

@@ -12,7 +12,11 @@ object Resources {
     }
 
     fun getResUri(ctx: Context, resId: Int): Uri {
-        return Uri.parse("android.resource://${ctx.packageName}/$resId")
+        return Uri.parse(getResUriStr(ctx, resId))
+    }
+
+    fun getResUriStr(ctx: Context, resId: Int): String {
+        return "android.resource://${ctx.packageName}/$resId"
     }
 
 }

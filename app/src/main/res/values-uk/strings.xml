@@ -24,6 +24,7 @@
     <!--  Settings activity  -->
     <string name="settings_title">Налаштування</string>
     <string name="settings_language">Мова</string>
+    <string name="settings_language_reload">Мова буде змінена тільки після перезапуску додатку</string>
     <string name="settings_vibration_title">Вібрація</string>
     <string name="settings_vibration_summary">Вібрація допоможе вам краще почути сигнал тривоги</string>
     <string name="settings_volume_title">Гучність сигналу</string>

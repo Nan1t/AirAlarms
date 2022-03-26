@@ -24,6 +24,7 @@
     <!--  Settings activity  -->
     <string name="settings_title">Настройки</string>
     <string name="settings_language">Язык</string>
+    <string name="settings_language_reload">Изменения языка применятся только после перезапуска</string>
     <string name="settings_vibration_title">Вибрация</string>
     <string name="settings_vibration_summary">Вибрация повышает шанс услышать сингал тревоги</string>
     <string name="settings_volume_title">Громкость сигнала</string>
