@@ -1,26 +1,45 @@
 package ua.nanit.airalarm.ui.fragment
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.preference.DropDownPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SeekBarPreference
-import ua.nanit.airalarm.PREFS_KEY_VOLUME
-import ua.nanit.airalarm.R
+import ua.nanit.airalarm.*
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
+        val langPrefs = findPreference<DropDownPreference>(PREFS_KEY_LANG)!!
         val volumePrefs = findPreference<SeekBarPreference>(PREFS_KEY_VOLUME)!!
+        val alarmSoundPrefs = findPreference<DropDownPreference>(PREFS_KEY_SOUND_ALARM)!!
+        val allClearSoundPrefs = findPreference<DropDownPreference>(PREFS_KEY_SOUND_ALL_CLEAR)!!
 
         updateVolumeIcon(volumePrefs, volumePrefs.value)
-        volumePrefs.setOnPreferenceChangeListener(this::onVolumeChanged)
+
+        langPrefs.setOnPreferenceChangeListener(this::onChange)
+        volumePrefs.setOnPreferenceChangeListener(this::onChange)
     }
 
-    private fun onVolumeChanged(pref: Preference, newVal: Any?): Boolean {
-        if (pref !is SeekBarPreference || newVal !is Int) return false
-        updateVolumeIcon(pref, newVal)
+    fun onPreferenceChanged(pref: SharedPreferences, key: String) {
+        val saved = findPreference<Preference>(key)
+
+        if (saved is DropDownPreference) {
+            saved.summary = saved.entry
+        }
+    }
+
+    private fun onChange(pref: Preference, newVal: Any?): Boolean {
+        when (pref.key) {
+            PREFS_KEY_VOLUME -> {
+                if (newVal !is Int) return false
+                updateVolumeIcon(pref as SeekBarPreference, newVal)
+            }
+        }
+
         return true
     }
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Повітряна тривога UA</string>
+    <string name="lang_key">uk</string>
+    <string name="lang_name">Українська</string>
 
     <string name="notification_btn_mute">Вимкнути сингал</string>
 

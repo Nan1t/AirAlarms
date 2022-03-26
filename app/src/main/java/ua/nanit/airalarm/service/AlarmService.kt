@@ -13,6 +13,8 @@ import ua.nanit.airalarm.*
 import ua.nanit.airalarm.alarm.*
 import ua.nanit.airalarm.api.ApiClient
 import ua.nanit.airalarm.region.RegionStatus
+import ua.nanit.airalarm.util.LocaleUtil
+import ua.nanit.airalarm.util.Resources
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -35,17 +37,19 @@ class AlarmService : Service(), Callback<RegionStatus> {
 
     override fun onCreate() {
         super.onCreate()
+        LocaleUtil.updateLocale(this)
         prefs = Resources.getSettings(this)
+        Log.d("AirAlarm", "Service created")
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         notificationAlarm = NotificationAlarm(this)
         alarm = MultipleAlarm(
             notificationAlarm,
             VibrationAlarm(this),
             SoundAlarm(this)
         )
-        Log.d("AirAlarm", "Service created")
-    }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         regionId = prefs.getInt(PREFS_KEY_REGION_ID, -1)
         alarmed = prefs.getBoolean(PREFS_KEY_ALARMED, false)
 

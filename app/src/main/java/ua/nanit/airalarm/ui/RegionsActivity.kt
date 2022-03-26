@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ua.nanit.airalarm.R
@@ -21,9 +20,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import ua.nanit.airalarm.PREFS_KEY_REGION_ID
 import ua.nanit.airalarm.PREFS_KEY_REGION_NAME
-import ua.nanit.airalarm.Resources
+import ua.nanit.airalarm.util.Resources
 
-class RegionsActivity : AppCompatActivity(R.layout.activity_regions),
+class RegionsActivity : LocalizedActivity(R.layout.activity_regions),
     Callback<Regions>,
     RegionClickListener {
 

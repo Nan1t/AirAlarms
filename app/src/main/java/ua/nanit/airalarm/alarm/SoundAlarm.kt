@@ -8,7 +8,7 @@ import android.os.Build
 import android.util.Log
 import ua.nanit.airalarm.PREFS_KEY_VOLUME
 import ua.nanit.airalarm.R
-import ua.nanit.airalarm.Resources
+import ua.nanit.airalarm.util.Resources
 import ua.nanit.airalarm.VOLUME_DEFAULT
 import kotlin.math.ceil
 

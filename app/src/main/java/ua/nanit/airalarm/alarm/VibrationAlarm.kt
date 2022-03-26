@@ -6,7 +6,7 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import ua.nanit.airalarm.PREFS_KEY_VIBRATION
-import ua.nanit.airalarm.Resources
+import ua.nanit.airalarm.util.Resources
 
 class VibrationAlarm(private val ctx: Context) : Alarm {
 

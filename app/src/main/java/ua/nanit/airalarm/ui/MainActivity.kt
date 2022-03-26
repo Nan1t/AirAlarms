@@ -12,15 +12,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ua.nanit.airalarm.*
 import ua.nanit.airalarm.receivers.AlarmReceiver
 import ua.nanit.airalarm.service.AlarmService
+import ua.nanit.airalarm.util.Resources
 
-class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
+class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
 
     private lateinit var rootView: View
 
@@ -77,10 +77,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
         LocalBroadcastManager.getInstance(this)
             .registerReceiver(receiver, IntentFilter(ACTION_ALARM))
 
+        val serviceIntent = Intent(this, AlarmService::class.java)
+            .putExtra(AlarmService.CMD_STOP_SIGNAL, true)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(Intent(this, AlarmService::class.java))
+            startForegroundService(serviceIntent)
         } else {
-            startService(Intent(this, AlarmService::class.java))
+            startService(serviceIntent)
         }
 
 //        if (isServiceKiller()) {
@@ -116,10 +119,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), AlarmView {
             .remove(PREFS_KEY_REGION_NAME)
             .apply()
 
+        startService(Intent(this, AlarmService::class.java)
+            .putExtra(AlarmService.CMD_STOP_SIGNAL, true))
+
         stopService(Intent(this, AlarmService::class.java))
-        val intent = Intent(this, RegionsActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
+
+        startActivity(Intent(this, RegionsActivity::class.java)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+
         finish()
     }
 

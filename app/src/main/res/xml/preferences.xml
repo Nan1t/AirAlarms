@@ -2,6 +2,15 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <DropDownPreference
+        app:key="language"
+        app:title="@string/settings_language"
+        app:summary="@string/lang_name"
+        app:icon="@drawable/ic_baseline_language"
+        app:entries="@array/locale_entries"
+        app:entryValues="@array/locale_values"
+        app:defaultValue="@string/lang_key" />
+
     <SwitchPreferenceCompat
         app:key="vibration"
         app:title="@string/settings_vibration_title"
@@ -18,6 +27,15 @@
         app:icon="@drawable/ic_baseline_volume_up"
         app:defaultValue="70" />
 
-    <Preference app:title="@string/settings_licenses" />
+    <DropDownPreference
+        app:key="sound_alarm"
+        app:title="@string/settings_ringtone_alarm"
+        app:icon="@drawable/ic_baseline_music_note" />
 
+    <DropDownPreference
+        app:key="sound_all_clear"
+        app:title="@string/settings_ringtone_all_clear"
+        app:icon="@drawable/ic_baseline_music_note" />
+
+    <Preference app:title="@string/settings_licenses" />
 </PreferenceScreen>

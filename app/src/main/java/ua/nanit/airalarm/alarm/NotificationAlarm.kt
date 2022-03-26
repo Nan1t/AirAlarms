@@ -9,24 +9,17 @@ import ua.nanit.airalarm.alarm.notification.AllClearNotification
 
 class NotificationAlarm(private val service: Service) : Alarm {
 
-    private val imgAlarmOn = BitmapFactory.decodeResource(service.resources, R.drawable.alarm_on)
-    private val imgAlarmOff = BitmapFactory.decodeResource(service.resources, R.drawable.alarm_off)
-
-    private val notifyAlarm = AlarmNotification(service, false, imgAlarmOn)
-        .build()
-    private val notifyAlarmMute = AlarmNotification(service, true, imgAlarmOn)
-        .build()
-    private val notifyAllClear = AllClearNotification(service, false, imgAlarmOff)
-        .build()
-    private val notifyAllClearMute = AllClearNotification(service, true, imgAlarmOff)
-        .build()
+    private val imgAlarmOn = BitmapFactory.decodeResource(service.resources, R.drawable.ic_alarm_on)
+    private val imgAlarmOff = BitmapFactory.decodeResource(service.resources, R.drawable.ic_alarm_off)
 
     override fun alarm() {
-        service.startForeground(NOTIFICATION_ID_MAIN, notifyAlarmMute)
+        val notification = AlarmNotification(service, true, imgAlarmOn)
+        service.startForeground(NOTIFICATION_ID_MAIN, notification.build())
     }
 
     override fun allClear() {
-        service.startForeground(NOTIFICATION_ID_MAIN, notifyAllClearMute)
+        val notification = AllClearNotification(service, true, imgAlarmOff)
+        service.startForeground(NOTIFICATION_ID_MAIN, notification.build())
     }
 
     override fun stop() {
@@ -34,13 +27,13 @@ class NotificationAlarm(private val service: Service) : Alarm {
     }
 
     fun alarm(withAction: Boolean) {
-        val notification = if (withAction) notifyAlarmMute else notifyAlarm
-        service.startForeground(NOTIFICATION_ID_MAIN, notification)
+        val notification = AlarmNotification(service, withAction, imgAlarmOn)
+        service.startForeground(NOTIFICATION_ID_MAIN, notification.build())
     }
 
     fun allClear(withAction: Boolean) {
-        val notification = if (withAction) notifyAllClearMute else notifyAllClear
-        service.startForeground(NOTIFICATION_ID_MAIN, notification)
+        val notification = AllClearNotification(service, withAction, imgAlarmOff)
+        service.startForeground(NOTIFICATION_ID_MAIN, notification.build())
     }
 
 }

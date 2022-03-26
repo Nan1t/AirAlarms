@@ -1,4 +1,4 @@
-package ua.nanit.airalarm
+package ua.nanit.airalarm.util
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">Air Alarm UA</string>
-
-    <!--  Non-translatable language names  -->
-    <string name="lang_en" translatable="false">English</string>
-    <string name="lang_ua" translatable="false">Українська</string>
-    <string name="lang_ru" translatable="false">Русский</string>
+    <string name="lang_key">en</string>
+    <string name="lang_name">English</string>
 
     <string name="notification_btn_mute">Mute signal</string>
 
