@@ -25,6 +25,12 @@
     <!--  Main activity  -->
     <string name="main_unsubscribe">Обрати інший регіон</string>
     <string name="main_settings">Налаштування</string>
+    <string name="main_dialog_title">Важливо!</string>
+    <string name="main_dialog_content">
+        Ваш девайс виключає сервіс повідомлень додатку після його закриття.
+        Перевірте, чи дозволено додатку працювати у фоні.
+        Коли додаток працює, ви будете бачити повідомлення про це
+    </string>
 
     <!--  Settings activity  -->
     <string name="settings_title">Налаштування</string>

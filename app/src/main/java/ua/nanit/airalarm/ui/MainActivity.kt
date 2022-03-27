@@ -1,5 +1,6 @@
 package ua.nanit.airalarm.ui
 
+import android.app.AlertDialog
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
@@ -86,9 +87,18 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
             startService(serviceIntent)
         }
 
-//        if (isServiceKiller()) {
-//
-//        }
+        if (isServiceKiller()) {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.main_dialog_title)
+                .setMessage(R.string.main_dialog_content)
+                .setPositiveButton(R.string.action_ok) { _, _ ->
+                    prefs.edit()
+                        .putBoolean(PREFS_KEY_NOTICED_SERVICE_KILLER, true)
+                        .apply()
+                }
+                .create()
+                .show()
+        }
     }
 
     override fun activateAlarm() {
@@ -130,16 +140,19 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
         finish()
     }
 
-//    private fun isServiceKiller(): Boolean {
-//        return when (Build.MANUFACTURER.lowercase()) {
-//            "xiaomi" -> true
-//            "oppo" -> true
-//            "vivo" -> true
-//            "letv" -> true
-//            "honor" -> true
-//            "meizu" -> true
-//            else -> false
-//        }
-//    }
+    private fun isServiceKiller(): Boolean {
+        if (prefs.getBoolean(PREFS_KEY_NOTICED_SERVICE_KILLER, false))
+            return false
+
+        return when (Build.MANUFACTURER.lowercase()) {
+            "xiaomi" -> true
+            "oppo" -> true
+            "vivo" -> true
+            "letv" -> true
+            "honor" -> true
+            "meizu" -> true
+            else -> false
+        }
+    }
 
 }

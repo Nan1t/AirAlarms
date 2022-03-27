@@ -46,4 +46,8 @@
         app:title="@string/settings_licenses"
         app:allowDividerAbove="true"
         app:iconSpaceReserved="false"/>
+
+    <Preference
+        app:summary="@string/license_sounds"
+        app:iconSpaceReserved="false"/>
 </PreferenceScreen>

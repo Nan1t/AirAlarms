@@ -4,6 +4,7 @@
     <string name="lang_name">English</string>
 
     <!--  Actions  -->
+    <string name="action_ok" translatable="false">OK</string>
     <string name="action_yes">Yes</string>
     <string name="action_no">No</string>
     <string name="notification_btn_mute">Mute signal</string>
@@ -24,6 +25,12 @@
     <!--  Main activity  -->
     <string name="main_unsubscribe">Select other region</string>
     <string name="main_settings">Settings</string>
+    <string name="main_dialog_title">Important!</string>
+    <string name="main_dialog_content">
+        Your have device that kills services after application closed.
+        Consider to allow this app work after it closed.
+        Non-closable notification must be always seen.
+    </string>
 
     <!--  Settings activity  -->
     <string name="settings_title">Settings</string>
@@ -37,9 +44,6 @@
     <string name="settings_ringtone_all_clear">All-clear ringtone</string>
     <string name="settings_ringtone_default">Default</string>
     <string name="settings_licenses">Open Source Licenses</string>
-
-    <!--  About activity  -->
-
 
     <!--  Copyright notes  -->
     <string name="license_sounds" translatable="false">Sound effects obtained from https://www.zapsplat.com</string>

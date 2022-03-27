@@ -25,6 +25,12 @@
     <!--  Main activity  -->
     <string name="main_unsubscribe">Выбрать другой регион</string>
     <string name="main_settings">Настройки</string>
+    <string name="main_dialog_title">Важно!</string>
+    <string name="main_dialog_content">
+        Ваше устройство отключает сервис уведомлений после закрытия приложения.
+        Убедитесь, что приложению разрешено работать в фоне.
+        Когда сервис тревоги работает, вы будете видеть незакрываемое уведомление.
+    </string>
 
     <!--  Settings activity  -->
     <string name="settings_title">Настройки</string>
