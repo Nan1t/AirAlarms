@@ -9,3 +9,9 @@ Application has additional options. You can:
 * Switch vibration on/off
 * Set own ringtones for alerts
 * Support for multiple languages
+
+# One important thing
+
+To right work of application, it has service to check alarm status periodically.
+Make sure that your android system allow to run app foreground services when main app is down.
+If this service works, you can see non-removable notification in tray.
