@@ -41,5 +41,9 @@
         app:icon="@drawable/ic_baseline_music_note"
         app:defaultValue="default" />
 
-    <Preference app:title="@string/settings_licenses" />
+    <Preference
+        app:key="licenses"
+        app:title="@string/settings_licenses"
+        app:allowDividerAbove="true"
+        app:iconSpaceReserved="false"/>
 </PreferenceScreen>

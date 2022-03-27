@@ -3,6 +3,9 @@
     <string name="lang_key">en</string>
     <string name="lang_name">English</string>
 
+    <!--  Actions  -->
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
     <string name="notification_btn_mute">Mute signal</string>
 
     <!--  Statuses  -->
@@ -15,6 +18,8 @@
     <string name="regions_title_state">Select state</string>
     <string name="regions_title_district">Select district</string>
     <string name="regions_select_state">Select whole state</string>
+    <string name="regions_dialog_title">Are you sure?</string>
+    <string name="regions_dialog_content">You selected a whole state. You will receive alarms from all districts of this state</string>
 
     <!--  Main activity  -->
     <string name="main_unsubscribe">Select other region</string>
@@ -31,7 +36,10 @@
     <string name="settings_ringtone_alarm">Alarm ringtone</string>
     <string name="settings_ringtone_all_clear">All-clear ringtone</string>
     <string name="settings_ringtone_default">Default</string>
-    <string name="settings_licenses">Licenses</string>
+    <string name="settings_licenses">Open Source Licenses</string>
+
+    <!--  About activity  -->
+
 
     <!--  Copyright notes  -->
     <string name="license_sounds" translatable="false">Sound effects obtained from https://www.zapsplat.com</string>

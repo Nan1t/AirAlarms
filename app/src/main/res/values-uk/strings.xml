@@ -4,6 +4,9 @@
     <string name="lang_key">uk</string>
     <string name="lang_name">Українська</string>
 
+    <!--  Actions  -->
+    <string name="action_yes">Так</string>
+    <string name="action_no">Ні</string>
     <string name="notification_btn_mute">Вимкнути сингал</string>
 
     <!--  Statuses  -->
@@ -16,6 +19,8 @@
     <string name="regions_title_state">Обрати область</string>
     <string name="regions_title_district">Обрати район</string>
     <string name="regions_select_state">Обрати всю область</string>
+    <string name="regions_dialog_title">Ви впевнені?</string>
+    <string name="regions_dialog_content">Ви вибрали всю область. Ви будете отримувати сповіщеня від всіх районів цієї області</string>
 
     <!--  Main activity  -->
     <string name="main_unsubscribe">Обрати інший регіон</string>

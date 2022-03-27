@@ -1,5 +1,6 @@
 package ua.nanit.airalarm.ui
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -49,12 +50,16 @@ class RegionsActivity : LocalizedActivity(R.layout.activity_regions),
 
     override fun onResponse(call: Call<Regions>, response: Response<Regions>) {
         if (response.isSuccessful) {
-            regions = response.body()!!
-            displayStates()
-            return
+            val body = response.body()
+
+            if (body != null) {
+                regions = body
+                displayStates()
+                return
+            }
         }
 
-        showFailToast("failure")
+        showFailToast("Failure")
     }
 
     override fun onFailure(call: Call<Regions>, t: Throwable) {
@@ -89,7 +94,15 @@ class RegionsActivity : LocalizedActivity(R.layout.activity_regions),
 
     private fun onClickSelectAll(view: View) {
         if (currentState != null) {
-            selectRegion(currentState!!)
+            AlertDialog.Builder(this)
+                .setTitle(R.string.regions_dialog_title)
+                .setMessage(R.string.regions_dialog_content)
+                .setNegativeButton(R.string.action_no) { _, _ -> }
+                .setPositiveButton(R.string.action_yes) { _, _ ->
+                    selectRegion(currentState!!)
+                }
+                .create()
+                .show()
         }
     }
 

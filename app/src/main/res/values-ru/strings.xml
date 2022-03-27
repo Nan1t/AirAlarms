@@ -4,6 +4,9 @@
     <string name="lang_key">ru</string>
     <string name="lang_name">Русский</string>
 
+    <!--  Actions  -->
+    <string name="action_yes">Да</string>
+    <string name="action_no">Нет</string>
     <string name="notification_btn_mute">Заглушить сигнал</string>
 
     <!--  Statuses  -->
@@ -16,6 +19,8 @@
     <string name="regions_title_state">Выберите область</string>
     <string name="regions_title_district">Выберите район</string>
     <string name="regions_select_state">Выбрать всю область</string>
+    <string name="regions_dialog_title">Вы уверены?</string>
+    <string name="regions_dialog_content">Вы выбрали всю область. Вы будете получать уведомления от всех районов этой области</string>
 
     <!--  Main activity  -->
     <string name="main_unsubscribe">Выбрать другой регион</string>

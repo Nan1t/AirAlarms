@@ -6,8 +6,6 @@ import ua.nanit.airalarm.ui.fragment.SettingsFragment
 
 class SettingsActivity : LocalizedActivity(R.layout.activity_settings) {
 
-    private val fragment = SettingsFragment()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTitle(R.string.settings_title)
@@ -15,7 +13,7 @@ class SettingsActivity : LocalizedActivity(R.layout.activity_settings) {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.settings_container, fragment)
+            .replace(R.id.settings_container, SettingsFragment())
             .commit()
     }
 

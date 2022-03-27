@@ -1,30 +1,35 @@
 package ua.nanit.airalarm.ui.fragment
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.preference.DropDownPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SeekBarPreference
+import androidx.preference.*
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ua.nanit.airalarm.*
+import ua.nanit.airalarm.R
 import ua.nanit.airalarm.alarm.SoundAlarm
+import ua.nanit.airalarm.alarm.VibrationAlarm
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private lateinit var testableAlarm: SoundAlarm
+    private lateinit var testSound: SoundAlarm
+    private lateinit var testVibration: VibrationAlarm
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
-        testableAlarm = SoundAlarm(requireContext())
+        testSound = SoundAlarm(requireContext())
+        testVibration = VibrationAlarm(requireContext())
 
         val langPrefs = findPreference<DropDownPreference>(PREFS_KEY_LANG)!!
+        val vibrationPrefs = findPreference<SwitchPreferenceCompat>(PREFS_KEY_VIBRATION)!!
         val volumePrefs = findPreference<SeekBarPreference>(PREFS_KEY_VOLUME)!!
         val alarmSoundPrefs = findPreference<DropDownPreference>(PREFS_KEY_SOUND_ALARM)!!
         val allClearSoundPrefs = findPreference<DropDownPreference>(PREFS_KEY_SOUND_ALL_CLEAR)!!
+        val licensesPrefs = findPreference<Preference>(PREFS_KEY_LICENSES)!!
 
         val ringtones = getRingtoneEntries()
 
@@ -39,25 +44,38 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         updateVolumeIcon(volumePrefs, volumePrefs.value)
 
         langPrefs.setOnPreferenceChangeListener(this::onChange)
+        vibrationPrefs.setOnPreferenceChangeListener(this::onChange)
         volumePrefs.setOnPreferenceChangeListener(this::onChange)
         alarmSoundPrefs.setOnPreferenceChangeListener(this::onChange)
         allClearSoundPrefs.setOnPreferenceChangeListener(this::onChange)
 
         preferenceScreen.sharedPreferences
             ?.registerOnSharedPreferenceChangeListener(this)
+
+        licensesPrefs.setOnPreferenceClickListener {
+            startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
+            true
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (testableAlarm.released) {
-            testableAlarm = SoundAlarm(requireContext())
+        if (testSound.released) {
+            testSound = SoundAlarm(requireContext())
         }
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+        testSound.stop()
+        Log.i("AirAlarm", "STOP PLAYER")
     }
 
     override fun onDetach() {
         super.onDetach()
-        testableAlarm.release()
+        testSound.release()
         Log.i("AirAlarm", "RELEASE PLAYER")
     }
 
@@ -71,10 +89,10 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         when(key) {
             PREFS_KEY_VOLUME,
             PREFS_KEY_SOUND_ALARM -> {
-                testableAlarm.alarm()
+                testSound.alarm()
             }
             PREFS_KEY_SOUND_ALL_CLEAR -> {
-                testableAlarm.allClear()
+                testSound.allClear()
             }
         }
     }
@@ -88,6 +106,11 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             PREFS_KEY_LANG -> {
                 Toast.makeText(requireContext(), R.string.settings_language_reload, Toast.LENGTH_LONG)
                     .show()
+            }
+            PREFS_KEY_VIBRATION -> {
+                if (newVal as Boolean) {
+                    testVibration.vibrateSingle()
+                }
             }
         }
 

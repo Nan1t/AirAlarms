@@ -20,6 +20,8 @@ class VibrationAlarm(private val ctx: Context) : Alarm {
             300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80,
             300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80, 300, 80, 100, 80
         )
+
+        private val effectSingle = longArrayOf(0, 200)
     }
 
     private val vibrator = ctx.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator
@@ -43,6 +45,10 @@ class VibrationAlarm(private val ctx: Context) : Alarm {
 
     override fun stop() {
         vibrator.cancel()
+    }
+
+    fun vibrateSingle() {
+        vibrate(effectSingle)
     }
 
     private fun vibrate(effect: LongArray) {
