@@ -126,7 +126,9 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
         when (view.id) {
             btnShutdown.id -> {
                 btnShutdown.isEnabled = false
-                stopAlarmService()
+                stopService(Intent(this, AlarmService::class.java))
+                Toast.makeText(this, R.string.main_stopped, Toast.LENGTH_LONG)
+                    .show()
             }
             btnSettings.id -> startActivity(Intent(this, SettingsActivity::class.java))
             btnUnsubscribe.id -> openRegionsListActivity()
@@ -143,7 +145,7 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
         startService(Intent(this, AlarmService::class.java)
             .putExtra(AlarmService.CMD_STOP_SIGNAL, true))
 
-        stopAlarmService()
+        stopService(Intent(this, AlarmService::class.java))
 
         startActivity(Intent(this, RegionsActivity::class.java)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
@@ -162,12 +164,6 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
             Toast.makeText(this, R.string.main_no_network, Toast.LENGTH_LONG)
                 .show()
         }
-    }
-
-    private fun stopAlarmService() {
-        stopService(Intent(this, AlarmService::class.java))
-        Toast.makeText(this, R.string.main_stopped, Toast.LENGTH_LONG)
-            .show()
     }
 
     private fun isServiceKiller(): Boolean {

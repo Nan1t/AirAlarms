@@ -1,25 +1,23 @@
 package ua.nanit.airalarm.alarm
 
 import android.app.*
-import android.graphics.BitmapFactory
 import ua.nanit.airalarm.NOTIFICATION_ID_MAIN
 import ua.nanit.airalarm.R
 import ua.nanit.airalarm.alarm.notification.AlarmNotification
 import ua.nanit.airalarm.alarm.notification.AllClearNotification
+import ua.nanit.airalarm.util.Resources
 
 class NotificationAlarm(private val service: Service) : Alarm {
 
-    private val imgAlarmOn = BitmapFactory.decodeResource(service.resources, R.drawable.ic_alarm_on)
-    private val imgAlarmOff = BitmapFactory.decodeResource(service.resources, R.drawable.ic_alarm_off)
+    private val imgAlarmOn = Resources.getVectorBitmap(service, R.drawable.ic_alarm_on)
+    private val imgAlarmOff = Resources.getVectorBitmap(service, R.drawable.ic_alarm_off)
 
     override fun alarm() {
-        val notification = AlarmNotification(service, true, imgAlarmOn)
-        service.startForeground(NOTIFICATION_ID_MAIN, notification.build())
+        alarm(true)
     }
 
     override fun allClear() {
-        val notification = AllClearNotification(service, true, imgAlarmOff)
-        service.startForeground(NOTIFICATION_ID_MAIN, notification.build())
+        allClear(true)
     }
 
     override fun stop() {
