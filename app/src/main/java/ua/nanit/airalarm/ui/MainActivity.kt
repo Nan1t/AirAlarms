@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,16 +27,17 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
 
     private lateinit var rootView: View
 
+    private lateinit var prefs: SharedPreferences
+    private lateinit var notifyManager: NotificationManager
+    private lateinit var connManager: ConnectivityManager
+
+    private lateinit var btnShutdown: FloatingActionButton
     private lateinit var btnSettings: FloatingActionButton
     private lateinit var btnUnsubscribe: Button
-
     private lateinit var statusImage: ImageView
     private lateinit var statusTitle: TextView
     private lateinit var statusSubtitle: AppCompatTextView
     private lateinit var regionName: TextView
-    private lateinit var prefs: SharedPreferences
-    private lateinit var receiver: AlarmReceiver
-    private lateinit var notifyManager: NotificationManager
 
     private var currentRegion = -1
 
@@ -52,9 +55,12 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
         }
 
         notifyManager = getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
-        receiver = AlarmReceiver(this)
+        connManager = getSystemService(Service.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        checkNetworkState()
 
         rootView = findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
+        btnShutdown = findViewById(R.id.main_btn_shutdown)
         btnSettings = findViewById(R.id.main_btn_settings)
         btnUnsubscribe = findViewById(R.id.btn_unsubscribe)
         statusImage = findViewById(R.id.status_icon)
@@ -64,6 +70,7 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
 
         regionName.text = prefs.getString(PREFS_KEY_REGION_NAME, "Region undefined")
 
+        btnShutdown.setOnClickListener(this::onClick)
         btnSettings.setOnClickListener(this::onClick)
         btnUnsubscribe.setOnClickListener(this::onClick)
 
@@ -76,7 +83,7 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
         }
 
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver(receiver, IntentFilter(ACTION_ALARM))
+            .registerReceiver(AlarmReceiver(this), IntentFilter(ACTION_ALARM))
 
         val serviceIntent = Intent(this, AlarmService::class.java)
             .putExtra(AlarmService.CMD_STOP_SIGNAL, true)
@@ -117,6 +124,10 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
 
     private fun onClick(view: View) {
         when (view.id) {
+            btnShutdown.id -> {
+                btnShutdown.isEnabled = false
+                stopAlarmService()
+            }
             btnSettings.id -> startActivity(Intent(this, SettingsActivity::class.java))
             btnUnsubscribe.id -> openRegionsListActivity()
         }
@@ -132,12 +143,31 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
         startService(Intent(this, AlarmService::class.java)
             .putExtra(AlarmService.CMD_STOP_SIGNAL, true))
 
-        stopService(Intent(this, AlarmService::class.java))
+        stopAlarmService()
 
         startActivity(Intent(this, RegionsActivity::class.java)
             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
         finish()
+    }
+
+    private fun checkNetworkState() {
+        val hasConnection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            connManager.activeNetwork != null
+        } else {
+            connManager.activeNetworkInfo != null
+        }
+
+        if (!hasConnection) {
+            Toast.makeText(this, R.string.main_no_network, Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
+    private fun stopAlarmService() {
+        stopService(Intent(this, AlarmService::class.java))
+        Toast.makeText(this, R.string.main_stopped, Toast.LENGTH_LONG)
+            .show()
     }
 
     private fun isServiceKiller(): Boolean {
@@ -151,7 +181,13 @@ class MainActivity : LocalizedActivity(R.layout.activity_main), AlarmView {
             "letv" -> true
             "honor" -> true
             "meizu" -> true
-            else -> false
+            else -> {
+                prefs.edit()
+                    .putBoolean(PREFS_KEY_NOTICED_SERVICE_KILLER, true)
+                    .apply()
+
+                return false
+            }
         }
     }
 

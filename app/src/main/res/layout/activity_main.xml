@@ -9,6 +9,16 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         style="@style/PrimaryButton.FaMiniButton"
+        android:id="@+id/main_btn_shutdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/main_shutdown"
+        app:srcCompat="@drawable/ic_baseline_power_settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/PrimaryButton.FaMiniButton"
         android:id="@+id/main_btn_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

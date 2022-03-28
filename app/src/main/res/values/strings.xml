@@ -23,7 +23,10 @@
     <string name="regions_dialog_content">You selected a whole state. You will receive alarms from all districts of this state</string>
 
     <!--  Main activity  -->
+    <string name="main_no_network">No network connection!</string>
     <string name="main_unsubscribe">Select other region</string>
+    <string name="main_shutdown">Shutdown service</string>
+    <string name="main_stopped">Alarm checking stopped</string>
     <string name="main_settings">Settings</string>
     <string name="main_dialog_title">Important!</string>
     <string name="main_dialog_content">

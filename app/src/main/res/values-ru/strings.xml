@@ -23,7 +23,10 @@
     <string name="regions_dialog_content">Вы выбрали всю область. Вы будете получать уведомления от всех районов этой области</string>
 
     <!--  Main activity  -->
+    <string name="main_no_network">Подключение к сети отсутствует!</string>
     <string name="main_unsubscribe">Выбрать другой регион</string>
+    <string name="main_shutdown">Выключить сервис</string>
+    <string name="main_stopped">Мониторинг тревоги отключен</string>
     <string name="main_settings">Настройки</string>
     <string name="main_dialog_title">Важно!</string>
     <string name="main_dialog_content">
